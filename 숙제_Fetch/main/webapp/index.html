@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript">
+//함수 선언 
+function add(a, b) {
+	return a + b;
+}	
+
+let result = add(10, 20);
+
+const add2 = (a, b) => {
+	return a + b;
+}
+
+console.log("add2(10,20) = ", add2(10,20));
+
+const add3 = (a, b) => a + b;
+
+console.log("add3(10,20) = ", add3(10,20));
+
+
+add4 = function(a, b) {
+	return a + b;
+}
+
+console.log("add4(10,20) = ", add4(10,20));
+
+const add5 = function(a, b) {
+	return a + b;
+}
+
+console.log("add5(10,20) = ", add5(10,20));
+
+const person = {
+	firstName : "홍"
+	, lastName : "길동"
+	, age : 10
+};
+console.log("person.firstName = ", person.firstName);
+console.log("person['firstName'] = ", person["firstName"]);
+console.log('person["firstName"] = ', person['firstName']);
+
+const person2 = {
+	firstName : "홍"
+	, lastName : "길동"
+	, age : 10
+	, output : function() {
+		console.log("firstName = ", this.firstName);
+	}
+};
+
+console.log("person2.firstName = ", person2.firstName);
+person2.output();
+
+function jsClick() {
+	document.getElementById('demo').innerHTML=Date();	
+}
+
+</script>
+<ul>
+	<li><a href="user.do?action=list">list</a></li>
+	<li><a href="boards?action=list">게시물 목록</a></li>
+</ul>
+
+
+<button onclick="document.getElementById('demo').innerHTML=Date()">The time is?</button>
+<button onclick="jsClick()">The time is?</button>
+<button id="time_button" >The time is?</button>
+<button id="time_button2" >The time is?</button>
+<button id="time_button3" >The time is?</button>
+
+<p id="demo"></p>
+
+<div id="a">안녕하세요</div>
+
+
+<input type="button" id="b1" value="fetch-get-text"><br/>
+<input type="button" id="b2" value="fetch-get-json"><br/>
+<input type="button" id="b3" value="fetch-post-text 2 text"><br/>
+<input type="button" id="b4" value="fetch-post-text 2 json"><br/>
+<input type="button" id="b5" value="fetch-post-json 2 json"><br/>
+
+<input type="button" id="b6" value="await fetch-get-json"><br/>
+<input type="button" id="b7" value="await fetch-post-json 2 json"><br/>
+
+<script>
+b1.onclick = function() {
+   fetch("fetch?name=text").then(res => res.text()).then(text => {
+	   const person = text.split(",");
+	   
+     	console.log("name = ", person[0]);      
+      	console.log("age = ", person[1]);      
+      	console.log("age+5 = ", parseInt(person[1]) + 5);      
+   });
+}
+
+b2.onclick = function() {
+   fetch("fetch?name=json").then(res => res.json()).then(json => {
+      console.log("json = ", json);      
+      console.log("result = ", json.result);      
+      console.log("name = ", json.name);      
+      console.log("age = ", json.age);      
+      console.log("age + 5 = ", json.age + 5);      
+   });
+}
+
+b3.onclick = function() {
+   fetch("fetch", {
+       method: "POST",
+       body: "type=text&name=hong&age=10",
+       headers: {
+           "Content-type": "application/x-www-form-urlencoded; charset=UTF-8;"
+       }
+   }).then(res => res.text()).then(text => {
+      console.log("text", text);      
+   });
+}
+
+b4.onclick = function() {
+   fetch("fetch", {
+       method: "POST",
+       body: "type=json&name=hong&age=10",
+       headers: {
+           "Content-type": "application/x-www-form-urlencoded; charset=UTF-8;"
+       }
+   }).then(res => res.json()).then(json=> {
+      console.log("result", json.result);      
+      console.log("name", json.name);      
+   });
+}
+//json 문자열로 서버에 전송하고 json으로 수신을 받는다
+b5.onclick = function() {
+	//json 객체 
+	const param = {name:"hong", age:10};
+	
+   fetch("fetch", {
+       method: "POST",
+//       body: '{"name":"hong", "age":10}',
+       body: JSON.stringify(param),
+       headers: {
+           "Content-type": "application/json; charset=UTF-8;"
+       }
+   }).then(res => res.json()).then(json=> {
+      console.log("result", json.result);      
+      console.log("name", json.name);      
+   });
+}
+
+b6.onclick = async function() {
+   fetch("fetch?name=json").then(res => res.json()).then(json => {
+      console.log("json = ", json);      
+      console.log("result = ", json.result);      
+      console.log("name = ", json.name);      
+      console.log("age = ", json.age);      
+      console.log("age + 5 = ", json.age + 5);      
+   });
+
+	   
+	let response = await fetch("fetch?name=json");
+	if (response.ok) {
+		let json = await response.json();
+	    console.log("json = ", json);      
+	    console.log("result = ", json.result);      
+	    console.log("name = ", json.name);      
+	    console.log("age = ", json.age);      
+	    console.log("age + 5 = ", json.age + 5);      
+	} else {
+		console.log("error = ", response.status);
+	}
+} 
+
+//json 문자열로 서버에 전송하고 json으로 수신을 받는다
+b7.onclick = async function() {
+	//json 객체 
+	const param = {name:"hongjildong", age:110};
+	
+   let response = await fetch("fetch", {
+       method: "POST",
+       body: JSON.stringify(param),
+       headers: {
+           "Content-type": "application/json; charset=UTF-8;"
+       }
+   });
+   if (response.ok) {
+	   let json = await response.json();
+       console.log("result", json.result);      
+       console.log("name", json.name);      
+   }
+}
+
+
+const jsonText = '{"name":"hong", "age":10}';
+const jsonObj = JSON.parse(jsonText);//문자열을 json 객체로 변환 
+const jsonText2 = JSON.stringify(jsonObj);//json 객체를 문자열로 변환 
+
+console.log("jsonText->", jsonText);
+console.log("jsonObj->", jsonObj);
+console.log("jsonText2->", jsonText2);
+
+
+</script>
+<script type="text/javascript">
+const time_button = document.getElementById("time_button");
+const time_button2 = document.getElementById("time_button2");
+const time_button3 = document.querySelector("#time_button3");
+
+//이벤트 핸들러를 추가하는 함수 
+time_button.addEventListener("click", jsClick); //함수를 연결한 것
+//이벤트 핸들러를 추가하는 함수 
+time_button2.addEventListener("click", () => {
+	alert("버튼 클릭시 호출됨 ...");
+}); //직접 구현 
+
+time_button3.addEventListener("click", () => {
+	alert("버튼 클릭시 호출됨 ...");
+}); //직접 구현 
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
